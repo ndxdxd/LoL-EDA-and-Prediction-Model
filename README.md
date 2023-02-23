@@ -6,7 +6,7 @@ by Andy Truong (amt007@ucsd.edu)
 
 A DSC80 Exploratory Data Anaylsis Project on which League of Legends (LoL) position/role "carries" the hardest, the Attack Damage Carry (Bot), commonly refered to as the ADC, or the Mid Laner (Mid).
 
-It has long been a debated topic about which role in the game is the most impactful between the Mid Laner and the ADC. The Mid Laner being the spearhead of the team, as the player controls the shortest path to the enemy's nexus. Whereas the ADC is the main damage source for their team to pick off enemy players and guide their team to success.
+It has long been a debated topic within the community about which role in the game is the most impactful between the Mid Laner and the ADC. The Mid Laner being the spearhead of the team, as the player controls the shortest path to the enemy's nexus. Whereas the ADC is the main damage source for their team to pick off enemy players and guide their team to success.
 
 Although both roles are essential to winning, we want to know which role in particular between the two "carries", performs exceptionally well in matches and the most effective on the team, the hardest.
 
@@ -14,19 +14,19 @@ The data set which we will use is from Oracle's Elixir, which provides CSV files
 
 The data set has 149232 rows, and 123 columns. However, we will be focusing on these columns which will help answer our question: position, datacompleteness, result, playername, kills, assists, deaths, totalgold, damagetochampions, doublekills, triplekills,quadrakills, and pentakills.
 
-position : position/role for each team, which contains 'top','jng' (jungle),'mid','bot', and 'sup' (str).
-datacompleteness : whether a game has missing data, contains 'complete' and 'partial' as values (str).
-result: indicates whether that player/team won the match (1 is True, 0 is False) (int)
-playername: name of the player on the team (str).
-kills: total number of kills for that player (int).
-assists: total number of assists for that player (int).
-deaths: total number of deaths for that player (int).
-totalgold: total gold accumalted in the game for that player (int).
-damagetochampions: total damage to champions by the player (int).
-doublekills: number of double kills made by the player (int).
-triplekills: number of triple kills made by the player (int).
-quadrakills: number of quadra kills made by the player (int).
-pentakills: number of penta kills made by the player (int).
+- position : position/role for each team, which contains 'top','jng' (jungle),'mid','bot', and 'sup' (str).
+- datacompleteness : whether a game has missing data, contains 'complete' and 'partial' as values (str).
+- result: indicates whether that player/team won the match (1 is True, 0 is False) (int)
+- playername: name of the player on the team (str).
+- kills: total number of kills for that player (int).
+- assists: total number of assists for that player (int).
+- deaths: total number of deaths for that player (int).
+- totalgold: total gold accumalted in the game for that player (int).
+- damagetochampions: total damage to champions by the player (int).
+- doublekills: number of double kills made by the player (int).
+- triplekills: number of triple kills made by the player (int).
+- quadrakills: number of quadra kills made by the player (int).
+- pentakills: number of penta kills made by the player (int).
 
 # Cleaning and EDA
 
@@ -36,13 +36,28 @@ After that, we want to convert the result column to a series of boolean values w
 Thus, we apply a lambda function which converts those 1 and 0s to Trues and Falses.
 
 To create another metric to determine which role performs the best, we will use a point system, that is found in the League of Legends Wikia, called "Dominance Factor" that is used to determine how dominant the player was in the game.
-**Equation: Dominance Factor = 2*Kills + Assists - 3*Deaths**
+
+---
+
+**Equation: Dominance Factor = 2 x Kills + Assists - 3 x Deaths**
 
 Unsurprsingly, the data set does contain empty values. Therefore, we must fill those null values with np.NaNs, specifically within the columns that contain the multi kills.
 
 Furthermore, we want to be able to get the amount of multi kills each player got in a game. So we will add up the count of double, triple, quadra, and penta kills and assign a new column to that dataframe called 'multikills'
 
 We will also drop playername column since we do not need to know the names of each player.
+
+Additionally, since we are only focused on the mid and bot lane, we will only look at the rows of mid and bot positions.
+
+Here is the head of our cleaned dataframe:
+
+| datacompleteness | result | position | kills | assists | deaths | totalgold | damagetochampions | doublekills | triplekills | quadrakills | pentakills | dominance_factor | multikills |
+| :--------------- | :----- | :------- | ----: | ------: | -----: | --------: | ----------------: | ----------: | ----------: | ----------: | ---------: | ---------------: | ---------: |
+| complete         | False  | mid      |     2 |       3 |      2 |      9715 |             14258 |           0 |           0 |           0 |          0 |                1 |          0 |
+| complete         | False  | bot      |     2 |       2 |      4 |     10605 |             11106 |           0 |           0 |           0 |          0 |               -6 |          0 |
+| complete         | True   | mid      |     6 |      12 |      3 |     11532 |             20690 |           2 |           0 |           0 |          0 |               15 |          2 |
+| complete         | True   | bot      |     8 |      10 |      2 |     14018 |             26687 |           3 |           0 |           0 |          0 |               20 |          3 |
+| complete         | False  | mid      |     2 |       0 |      4 |     15149 |             23082 |           0 |           0 |           0 |          0 |               -8 |          0 |
 
 ## Univariate Analysis
 
@@ -66,7 +81,7 @@ We will run a permutation test to determine if the damagetochampions column is M
 
 We chose our test statistic to be be Total Variation Distance, since we are looking at two categorical distributions, complete vs partially complete in the data completeness column. We will also use a significance level of 0.05
 
-After running our permutation test by shuffling the missing damagetochampion columns, we found that our p value is 0.012, which is less than the signifcant level. Thus, we reject the null hypothesis that the damagetochampion column does not depend on the data completeness column, and is likely to be MAR dependent on datacompletness.
+After running our permutation test by shuffling the missing damagetochampion columns, we found that our p value is 0.012, which is less than the signifcance level. Thus, we reject the null hypothesis that the damagetochampion column does not depend on the data completeness column, and is potentially to be MAR dependent on datacompletness.
 
 insert graphs and tables
 
