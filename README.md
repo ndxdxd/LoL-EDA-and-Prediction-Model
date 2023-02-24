@@ -73,7 +73,7 @@ In this bar graph, we can see that the Bot has a higher average kill count than 
 
 In this bar graph, we can see that Bot has a slightly higher average damage to champions than Mid within the data set
 
-<iframe src="assets/avgmultikills.html" width=800 height=600 frameBorder=0></iframe>
+<iframe src="assets/multikillbarfixed.html" width=800 height=600 frameBorder=0></iframe>
 
 In this bar graph, we can see that bot has a higher multi kill average than Mid within the data set
 
@@ -130,7 +130,37 @@ After running our permutation test, we get a p value of 1, which suggests that w
 
 Now to finally answer our question, which position carries the hardest, bot or mid? To determine this, we will run a permutation test.
 
-Null Hypothesis: The Dominance Factor of both Bot and Mid positions will be the same on average
+Null Hypothesis: The Dominance Factor of both Bot and Mid positions will be the same on average, and that any difference in means is solely due to chance.
 Alt Hypothesis: The Bot position's average Dominance Factor would be greater than the Dominance Factor of the Mid Laner.
 
+We will use a significance level of 0.05, since it is the standard convention.
+
 The test statistic that we will use is the difference in means of dominance factor between bot and mid.
+
+**Mean Dominance Factor of Mid - Mean Dominance Factor of Bot**
+
+To simplify our dataframe, we will get the only the position and dominance_factor columns.
+
+| position | dominance_factor |
+| :------- | ---------------: |
+| mid      |                1 |
+| bot      |               -6 |
+| mid      |               15 |
+| bot      |               20 |
+| mid      |               -8 |
+
+Here is the distribution of the dominance factors for both of the roles:
+
+<iframe src="assets/hyptesthist.html" width=800 height=600 frameBorder=0></iframe>
+
+As we can see, the distributions have a similar shape and a similar center. However, bot appears to have a higher average.
+
+Now we will run our permutation tests to calculate the differences of the group's dominance factor means, shuffling the dominance factor column.
+
+This is the result Empirical Distribution of our Permutation Test.
+
+<iframe src="assets/empiricaldistofdomfacmeandiff.html" width=800 height=600 frameBorder=0></iframe>
+
+From this distribution, we can see that the majority of the differences are centered around 0. However, our observed test statistic lied at -1.32, which is far away from the distribution.
+
+Under our null hypothesis, we rarely see differences that are much larger than our observed test statistic. Furthermore, our calculated p value is 0.0, since we are looking to the left of our observed test statistic as our null hypothesis states that there should not be a significant difference in means. As a result, we reject the null hypothesis that the both bot and mid are from the same distribution. Therefore, we can conclude that dominance factors between bot and mid _appear_ to be different, specifically with bot having a larger dominance factor.
