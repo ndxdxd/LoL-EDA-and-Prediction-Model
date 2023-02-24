@@ -168,4 +168,4 @@ From this distribution, we can see that the majority of the differences are cent
 
 Under our null hypothesis, we rarely see differences that are as large as our observed test statistic. Furthermore, our calculated p value is 0.0, since we are looking to the left of our observed test statistic as our null hypothesis states that there should not be a significant difference in means. As a result, we reject the null hypothesis that the both bot and mid are from the same distribution in damage to champions. Therefore, we can potentially conclude that damage to champions between bot and mid _appear_ to be different, specifically with bot having a greater damage to champions.
 
-**As such, our data suggests that Bot "carries" harder than Mid, as on average the position seems to deal more damage than the Mid Lane.**
+**As such, our data suggests that Bot "carries" harder than Mid, as on average the position seems to deal more damage to enemey champions than the Mid Lane.**
