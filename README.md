@@ -61,13 +61,46 @@ Here is the head of our cleaned dataframe:
 
 ## Univariate Analysis
 
-Average Dominance factor score between Mid and Bot.
-
 <iframe src="assets/dominance_factor_bar.html" width=800 height=600 frameBorder=0></iframe>
+
+In this bar graph, we can see that the Bot has a higher Dominance Factor average than Mid within the data set.
+
+<iframe src="assets/file-name.html" width=800 height=600 frameBorder=0></iframe>
+
+In this bar graph, we can see that the Bot has a higher average kill count than Mid within the data set.
+
+<iframe src="assets/averagedamage.html" width=800 height=600 frameBorder=0></iframe>
+
+In this bar graph, we can see that Bot has a slightly higher average damage to champions than Mid within the data set
+
+<iframe src="assets/avgmultikills.html" width=800 height=600 frameBorder=0></iframe>
+
+In this bar graph, we can see that bot has a higher multi kill average than Mid within the data set
 
 ## Bivariate Analysis
 
+<iframe src="assets/multikillconditionalonresult.html" width=800 height=600 frameBorder=0></iframe>
+
+In this graph, we can see that when the game is won or lost, bot still maintains a higher multi kill average than mid.
+
+<iframe src="assets/avgdamageconditionalonresult.html" width=800 height=600 frameBorder=0></iframe>
+
+In this graph, we can see that when the game is won or lost, bot maintains has a slightly higher damage average onto champions than mid.
+
+<iframe src="assets/killconditionalonresult.html" width=800 height=600 frameBorder=0></iframe>
+
+In this graph, we can see that when the game is won or lost, bot maintains a higher kill average than mid.
+
 ## Interesting Aggregates
+
+This is a pivot table where the index is the position, the results are the columns, and the values are the dominance factor, aggregated to be the average.
+
+| position |    False |    True |
+| :------- | -------: | ------: |
+| bot      | -1.98939 | 14.4797 |
+| mid      | -2.70872 |  12.554 |
+
+As we can see here, whenever bot or mid lose, they have a negative dominance factor, which makes sense. However, bot still manages to have a higher dominance factor in both results.
 
 # Assessment of Missingness
 
@@ -81,17 +114,17 @@ We will run a permutation test to determine if the damagetochampions column is M
 
 We chose our test statistic to be be Total Variation Distance, since we are looking at two categorical distributions, complete vs partially complete in the data completeness column. We will also use a significance level of 0.05
 
-After running our permutation test by shuffling the missing damagetochampion columns, we found that our p value is 0.012, which is less than the signifcance level. Thus, we reject the null hypothesis that the damagetochampion column does not depend on the data completeness column, and is potentially to be MAR dependent on datacompletness.
+<iframe src="assets/fixedempirical.html" width=800 height=600 frameBorder=0></iframe>
 
-insert graphs and tables
+After running our permutation test by shuffling the missing damagetochampion columns, we found that our p value is 0.012, which is less than the signifcance level. Thus, we reject the null hypothesis that the damagetochampion column does not depend on the data completeness column, and is potentially to be MAR dependent on datacompletness.
 
 We also will run a permutation test to determine if multi kills is MAR vs MCAR with the column position.
 
 In similar fashion, we choose TVD as our test statistic and a significance level of 0.05.
 
-After running our permutation test, we get a p value of 1, which suggests that we strongly fail to the null hypothesis that the distribution of positions is the same when multi kills is missing or not missing. This means that that the multkills column could potentailly be MCAR.
+<iframe src="assets/empiricaldistofmultikills.html" width=800 height=600 frameBorder=0></iframe>
 
-insert graphs and tables
+After running our permutation test, we get a p value of 1, which suggests that we strongly fail to the null hypothesis that the distribution of positions is the same when multi kills is missing or not missing. This means that that the multkills column could potentailly be MCAR.
 
 # Hypothesis Testing
 
@@ -101,5 +134,3 @@ Null Hypothesis: The Dominance Factor of both Bot and Mid positions will be the 
 Alt Hypothesis: The Bot position's average Dominance Factor would be greater than the Dominance Factor of the Mid Laner.
 
 The test statistic that we will use is the difference in means of dominance factor between bot and mid.
-
-<iframe src="assets/file-name.html" width=800 height=600 frameBorder=0></iframe>
