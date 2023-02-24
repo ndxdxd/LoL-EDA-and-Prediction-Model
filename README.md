@@ -133,6 +133,7 @@ Now to finally answer our question, which position carries the hardest, bot or m
 To measure "carrying," we will use the column 'damagetochampions'. Although initially we were going to use dominance factor, we found out that players could have a relatively high dominance factor but not that much damage to champions. In addition, damaging champions plays a big role in winning games since getting them low enough to eliminate them is important to eliminating them in the first place.
 
 **Null Hypothesis**: The damage to champions of both Bot and Mid positions will be the same on average, and that any difference in means is solely due to chance.
+
 **Alt Hypothesis**: The Bot position's average damage to champions would be greater than the damage to champions of the Mid Laner.
 
 We will use a significance level of **0.05**, since it is the standard convention.
@@ -165,4 +166,6 @@ This is the result Empirical Distribution of our Permutation Test.
 
 From this distribution, we can see that the majority of the differences are centered around 0. However, our observed test statistic lies at around -598, which is far away from the distribution.
 
-Under our null hypothesis, we rarely see differences that are as large as our observed test statistic. Furthermore, our calculated p value is 0.0, since we are looking to the left of our observed test statistic as our null hypothesis states that there should not be a significant difference in means. As a result, we reject the null hypothesis that the both bot and mid are from the same distribution in damage to champions. Therefore, we can conclude that damage to champions between bot and mid _appear_ to be different, specifically with bot having a greater damage to champions.
+Under our null hypothesis, we rarely see differences that are as large as our observed test statistic. Furthermore, our calculated p value is 0.0, since we are looking to the left of our observed test statistic as our null hypothesis states that there should not be a significant difference in means. As a result, we reject the null hypothesis that the both bot and mid are from the same distribution in damage to champions. Therefore, we can potentially conclude that damage to champions between bot and mid _appear_ to be different, specifically with bot having a greater damage to champions.
+
+**As such, our data suggests that Bot "carries" harder than Mid, as on average the position seems to deal more damage than the Mid Lane.**
