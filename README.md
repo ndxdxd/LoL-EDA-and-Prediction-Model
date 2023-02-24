@@ -6,6 +6,8 @@ by Andy Truong (amt007@ucsd.edu)
 
 A DSC80 Exploratory Data Anaylsis Project on which League of Legends (LoL) position/role "carries" the hardest, the Attack Damage Carry (Bot), commonly refered to as the ADC, or the Mid Laner (Mid).
 
+---
+
 It has long been a debated topic within the community about which role in the game is the most impactful between the Mid Laner and the ADC. The Mid Laner being the spearhead of the team, as the player controls the shortest path to the enemy's nexus. Whereas the ADC is the main damage source for their team to pick off enemy players and guide their team to success.
 
 Although both roles are essential to winning, we want to know which role in particular between the two "carries", performs exceptionally well in matches and the most effective on the team, the hardest.
@@ -14,7 +16,7 @@ The data set which we will use is from Oracle's Elixir, which provides CSV files
 
 The data set has 149232 rows, and 123 columns. However, we will be focusing on these columns which will help answer our question: position, datacompleteness, result, playername, kills, assists, deaths, totalgold, damagetochampions, doublekills, triplekills,quadrakills, and pentakills.
 
-- position : position/role for each team, which contains 'top','jng' (jungle),'mid','bot', and 'sup' (str).
+- position : position/role for each team, which contains 'top','jng' (jungle),'mid' (middle),'bot' (bottom or adc), and 'sup' (support) (str).
 - datacompleteness : whether a game has missing data, contains 'complete' and 'partial' as values (str).
 - result: indicates whether that player/team won the match (1 is True, 0 is False) (int)
 - playername: name of the player on the team (str).
@@ -37,11 +39,9 @@ Thus, we apply a lambda function which converts those 1 and 0s to Trues and Fals
 
 To create another metric to determine which role performs the best, we will use a point system, that is found in the League of Legends Wikia, called "Dominance Factor" that is used to determine how dominant the player was in the game.
 
----
-
 **Equation: Dominance Factor = 2 x Kills + Assists - 3 x Deaths**
 
-Unsurprsingly, the data set does contain empty values. Therefore, we must fill those null values with np.NaNs, specifically within the columns that contain the multi kills.
+Unsurprisingly, the data set does contain empty values. Therefore, we must fill those null values with np.NaNs, specifically within the columns that contain the multi kills.
 
 Furthermore, we want to be able to get the amount of multi kills each player got in a game. So we will add up the count of double, triple, quadra, and penta kills and assign a new column to that dataframe called 'multikills'
 
@@ -75,19 +75,19 @@ In this bar graph, we can see that Bot has a slightly higher average damage to c
 
 <iframe src="assets/multikillbarfixed.html" width=800 height=600 frameBorder=0></iframe>
 
-In this bar graph, we can see that bot has a higher multi kill average than Mid within the data set
+In this bar graph, we can see that Bot has a higher multi kill average than Mid within the data set
 
 ## Bivariate Analysis
 
-<iframe src="assets/multikillconditionalonresult.html" width=800 height=600 frameBorder=0></iframe>
+<iframe src="assets/multikillbifix.html" width=800 height=600 frameBorder=0></iframe>
 
-In this graph, we can see that when the game is won or lost, bot still maintains a higher multi kill average than mid.
+In this graph, we can see that when the game is won or lost, Bot still maintains a higher multi kill average than Mid.
 
-<iframe src="assets/avgdamageconditionalonresult.html" width=800 height=600 frameBorder=0></iframe>
+<iframe src="assets/damagetochampsbivariatefix.html" width=800 height=600 frameBorder=0></iframe>
 
 In this graph, we can see that when the game is won or lost, bot maintains has a slightly higher damage average onto champions than mid.
 
-<iframe src="assets/killconditionalonresult.html" width=800 height=600 frameBorder=0></iframe>
+<iframe src="assets/killsavgsbivariatefix.html" width=800 height=600 frameBorder=0></iframe>
 
 In this graph, we can see that when the game is won or lost, bot maintains a higher kill average than mid.
 
@@ -100,7 +100,7 @@ This is a pivot table where the index is the position, the results are the colum
 | bot      | -1.98939 | 14.4797 |
 | mid      | -2.70872 |  12.554 |
 
-As we can see here, whenever bot or mid lose, they have a negative dominance factor, which makes sense. However, bot still manages to have a higher dominance factor in both results.
+As we can see here, whenever bot or mid lose, they have a negative dominance factor. However, bot still manages to have a higher dominance factor in both results.
 
 # Assessment of Missingness
 
@@ -130,37 +130,39 @@ After running our permutation test, we get a p value of 1, which suggests that w
 
 Now to finally answer our question, which position carries the hardest, bot or mid? To determine this, we will run a permutation test.
 
-Null Hypothesis: The Dominance Factor of both Bot and Mid positions will be the same on average, and that any difference in means is solely due to chance.
-Alt Hypothesis: The Bot position's average Dominance Factor would be greater than the Dominance Factor of the Mid Laner.
+To measure "carrying," we will use the column 'damagetochampions'. Although initially we were going to use dominance factor, we found out that players could have a relatively high dominance factor but not that much damage to champions. In addition, damaging champions plays a big role in winning games since getting them low enough to eliminate them is important to eliminating them in the first place.
 
-We will use a significance level of 0.05, since it is the standard convention.
+**Null Hypothesis**: The damage to champions of both Bot and Mid positions will be the same on average, and that any difference in means is solely due to chance.
+**Alt Hypothesis**: The Bot position's average damage to champions would be greater than the damage to champions of the Mid Laner.
 
-The test statistic that we will use is the difference in means of dominance factor between bot and mid.
+We will use a significance level of **0.05**, since it is the standard convention.
 
-**Mean Dominance Factor of Mid - Mean Dominance Factor of Bot**
+The test statistic that we will use is the difference in means of damage to champions between bot and mid, since the two distributions are numeric, (damagetochamps from Bot, damagetochamps from Mid).
 
-To simplify our dataframe, we will get the only the position and dominance_factor columns.
+**Mean Damage to Champions of Mid - Mean Damage to Champions of Bot**
 
-| position | dominance_factor |
-| :------- | ---------------: |
-| mid      |                1 |
-| bot      |               -6 |
-| mid      |               15 |
-| bot      |               20 |
-| mid      |               -8 |
+To simplify our dataframe, we will get the only the position and damage to champions columns.
 
-Here is the distribution of the dominance factors for both of the roles:
+| position | damagetochampions |
+| :------- | ----------------: |
+| mid      |             14258 |
+| bot      |             11106 |
+| mid      |             20690 |
+| bot      |             26687 |
+| mid      |             23082 |
 
-<iframe src="assets/hyptesthist.html" width=800 height=600 frameBorder=0></iframe>
+Here is the distribution of the damagetochampions for both of the roles:
+
+<iframe src="assets/damagetochamphyp.html" width=800 height=600 frameBorder=0></iframe>
 
 As we can see, the distributions have a similar shape and a similar center. However, bot appears to have a higher average.
 
-Now we will run our permutation tests to calculate the differences of the group's dominance factor means, shuffling the dominance factor column.
+Now we will run our permutation tests to calculate the differences of the group's damage to champions means, shuffling the 'damagetochampions' column.
 
 This is the result Empirical Distribution of our Permutation Test.
 
-<iframe src="assets/empiricaldistofdomfacmeandiff.html" width=800 height=600 frameBorder=0></iframe>
+<iframe src="assets/damagetochampemp.html" width=800 height=600 frameBorder=0></iframe>
 
-From this distribution, we can see that the majority of the differences are centered around 0. However, our observed test statistic lied at -1.32, which is far away from the distribution.
+From this distribution, we can see that the majority of the differences are centered around 0. However, our observed test statistic lies at around -598, which is far away from the distribution.
 
-Under our null hypothesis, we rarely see differences that are much larger than our observed test statistic. Furthermore, our calculated p value is 0.0, since we are looking to the left of our observed test statistic as our null hypothesis states that there should not be a significant difference in means. As a result, we reject the null hypothesis that the both bot and mid are from the same distribution. Therefore, we can conclude that dominance factors between bot and mid _appear_ to be different, specifically with bot having a larger dominance factor.
+Under our null hypothesis, we rarely see differences that are as large as our observed test statistic. Furthermore, our calculated p value is 0.0, since we are looking to the left of our observed test statistic as our null hypothesis states that there should not be a significant difference in means. As a result, we reject the null hypothesis that the both bot and mid are from the same distribution in damage to champions. Therefore, we can conclude that damage to champions between bot and mid _appear_ to be different, specifically with bot having a greater damage to champions.
